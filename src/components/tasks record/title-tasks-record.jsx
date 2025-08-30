@@ -1,59 +1,23 @@
-// src/components/tasks/tasks-oral-defense.jsx
+// src/components/title-tasks-record.jsx
 import React, { useState, useEffect, useRef } from "react";
-import taskIcon from "../../assets/tasks-icon.png";
+import taskRecordIcon from "../../assets/tasks-record-icon.png"; // Updated icon
 import searchIcon from "../../assets/search-icon.png";
 import filterIcon from "../../assets/filter-icon.png";
 import exitIcon from "../../assets/exit-icon.png";
-import dropdownIconWhite from "../../assets/dropdown-icon-white.png";
 
-const TasksOralDefense = () => {
-  const [status, setStatus] = useState("To Review");
-  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+const TitleTasksRecord = () => {
   const [filterCategory, setFilterCategory] = useState("Filter");
   const [filterValue, setFilterValue] = useState("");
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [activeSubFilter, setActiveSubFilter] = useState(null);
 
-  const statusDropdownRef = useRef(null);
   const filterDropdownRef = useRef(null);
 
-  const STATUS_OPTIONS = ["To Do", "In Progress", "To Review", "Missed"];
-  const PROJECT_PHASES = [
-    "Planning",
-    "Design",
-    "Development",
-    "Testing",
-    "Deployment",
-    "Review",
-  ];
-
-  const getStatusColor = (value) => {
-    switch (value) {
-      case "To Do":
-        return "#FABC3F";
-      case "In Progress":
-        return "#809D3C";
-      case "To Review":
-        return "#578FCA";
-      case "Missed":
-        return "#D32F2F";
-      default:
-        return "#ccc";
-    }
-  };
+  const PROJECT_PHASES = ["Planning", "Design", "Development", "Testing", "Deployment", "Review"];
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        statusDropdownRef.current &&
-        !statusDropdownRef.current.contains(event.target)
-      ) {
-        setShowStatusDropdown(false);
-      }
-      if (
-        filterDropdownRef.current &&
-        !filterDropdownRef.current.contains(event.target)
-      ) {
+      if (filterDropdownRef.current && !filterDropdownRef.current.contains(event.target)) {
         setShowFilterDropdown(false);
         setActiveSubFilter(null);
       }
@@ -75,8 +39,8 @@ const TasksOralDefense = () => {
   return (
     <div className="page-wrapper">
       <h2 className="section-title">
-        <img src={taskIcon} alt="Tasks Icon" className="icon-image" />
-        Tasks
+        <img src={taskRecordIcon} alt="Tasks Record Icon" className="icon-image" /> {/* Updated icon */}
+        Tasks Record
       </h2>
       <hr className="divider" />
 
@@ -110,12 +74,6 @@ const TasksOralDefense = () => {
                   <>
                     <div
                       className="dropdown-item"
-                      onClick={() => setActiveSubFilter("Status")}
-                    >
-                      Status
-                    </div>
-                    <div
-                      className="dropdown-item"
                       onClick={() => setActiveSubFilter("Project Phase")}
                     >
                       Project Phase
@@ -125,22 +83,20 @@ const TasksOralDefense = () => {
                   <>
                     <div className="dropdown-title">{activeSubFilter}</div>
                     <hr />
-                    {(activeSubFilter === "Status" ? STATUS_OPTIONS : PROJECT_PHASES).map(
-                      (opt) => (
-                        <div
-                          key={opt}
-                          className="dropdown-item"
-                          onClick={() => {
-                            setFilterValue(opt);
-                            setFilterCategory(activeSubFilter);
-                            setShowFilterDropdown(false);
-                            setActiveSubFilter(null);
-                          }}
-                        >
-                          {opt}
-                        </div>
-                      )
-                    )}
+                    {PROJECT_PHASES.map((opt) => (
+                      <div
+                        key={opt}
+                        className="dropdown-item"
+                        onClick={() => {
+                          setFilterValue(opt);
+                          setFilterCategory(activeSubFilter);
+                          setShowFilterDropdown(false);
+                          setActiveSubFilter(null);
+                        }}
+                      >
+                        {opt}
+                      </div>
+                    ))}
                   </>
                 )}
               </div>
@@ -154,11 +110,10 @@ const TasksOralDefense = () => {
               <th className="center-text">NO</th>
               <th className="center-text">Assigned</th>
               <th className="center-text">Tasks</th>
-              <th className="center-text">Subtasks</th>
-              <th className="center-text">Elements</th>
               <th className="center-text">Date Created</th>
               <th className="center-text">Due Date</th>
               <th className="center-text">Time</th>
+              <th className="center-text">Date Completed</th> {/* Added column */}
               <th className="center-text">Revision No.</th>
               <th className="center-text">Status</th>
               <th className="center-text">Methodology</th>
@@ -169,47 +124,19 @@ const TasksOralDefense = () => {
             <tr>
               <td className="center-text">1.</td>
               <td className="center-text">Harzwel Zhen B Lacson</td>
-              <td className="center-text">Document Review</td>
-              <td className="center-text">Initial Draft Review</td>
-              <td className="center-text">Text Elements</td>
-              <td className="center-text">Jan 5, 2025</td>
-              <td className="center-text">Jan 10, 2025</td>
-              <td className="center-text">8:00 AM</td>
+              <td className="center-text">Title Proposal Writing</td>
+              <td className="center-text">Dec 1, 2024</td>
+              <td className="center-text">Dec 5, 2024</td>
+              <td className="center-text">9:00 AM</td>
+              <td className="center-text">Dec 5, 2024</td> {/* Date Completed */}
               <td className="center-text revision">No Revision</td>
               <td className="center-text status-cell">
-                <div className="dropdown-wrapper" ref={statusDropdownRef}>
-                  <div
-                    className="status-badge"
-                    style={{ backgroundColor: getStatusColor(status) }}
-                    onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-                  >
-                    <span className="status-text">{status}</span>
-                    <img
-                      src={dropdownIconWhite}
-                      alt="Dropdown Icon"
-                      className="status-dropdown-icon"
-                    />
-                  </div>
-                  {showStatusDropdown && (
-                    <div className="dropdown-menu">
-                      {STATUS_OPTIONS.map((opt) => (
-                        <div
-                          key={opt}
-                          className="dropdown-item"
-                          onClick={() => {
-                            setStatus(opt);
-                            setShowStatusDropdown(false);
-                          }}
-                        >
-                          {opt}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <span className="status-text" style={{ backgroundColor: "#578FCA" }}>
+                  Completed
+                </span> {/* Status is fixed to "Completed" */}
               </td>
               <td className="center-text">Agile</td>
-              <td className="center-text">Design</td>
+              <td className="center-text">Planning</td>
             </tr>
           </tbody>
         </table>
@@ -381,36 +308,19 @@ const TasksOralDefense = () => {
           font-weight: bold;
         }
 
-        .dropdown-wrapper {
-          position: relative;
-          display: inline-block;
-          width: 120px;
-        }
-
-        .status-badge {
-          display: inline-flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 6px 12px;
-          border-radius: 12px;
+        .status-cell {
           color: #fff;
-          cursor: pointer;
-          font-weight: bold;
-          width: 100%;
         }
 
         .status-text {
-          font-size: 14px;
-        }
-
-        .status-dropdown-icon {
-          width: 12px;
-          height: 12px;
-          margin-left: 6px;
+          background-color: #578FCA;
+          padding: 6px 12px;
+          border-radius: 12px;
+          font-weight: bold;
         }
       `}</style>
     </div>
   );
 };
 
-export default TasksOralDefense;
+export default TitleTasksRecord;

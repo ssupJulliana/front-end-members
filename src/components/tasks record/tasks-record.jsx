@@ -1,13 +1,15 @@
 // src/components/tasks-record.jsx
 
 import React, { useState, useRef, useEffect } from 'react';
-import taskIcon from "../../assets/tasks-record-icon.png";  // Make sure this path is correct
-import recordIcon from "../../assets/records-icon.png";  // Path to your new icon
+import { useNavigate } from 'react-router-dom';  // Added for navigation
+import taskIcon from "../../assets/tasks-record-icon.png";
+import recordIcon from "../../assets/records-icon.png";
 
 export default function TasksRecord() {
   const [status, setStatus] = useState("To Review");
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const statusDropdownRef = useRef(null);
+  const navigate = useNavigate();  // Added hook for navigation
 
   const STATUS_OPTIONS = ["To Do", "In Progress", "To Review", "Missed"];
 
@@ -41,6 +43,10 @@ export default function TasksRecord() {
     };
   }, []);
 
+  const handleCardClick = (path) => {
+    navigate(path); // Navigate to the specific path
+  };
+
   return (
     <div className="tasks-record-wrapper">
       <h2 className="section-title">
@@ -55,7 +61,7 @@ export default function TasksRecord() {
 
       <div className="tasks-record-container">
         {/* Title Defense Card */}
-        <div className="task-card" onClick={() => window.location.href = '/title-defense'}>
+        <div className="task-card" onClick={() => handleCardClick('/title-tasks-record')}>
           <div className="task-card-icon">
             <img src={recordIcon} alt="Title Defense Icon" className="card-icon" />
           </div>
@@ -65,7 +71,7 @@ export default function TasksRecord() {
         </div>
 
         {/* Oral Defense Card */}
-        <div className="task-card" onClick={() => window.location.href = '/tasks'}>
+        <div className="task-card" onClick={() => handleCardClick('/oral-tasks-record')}>
           <div className="task-card-icon">
             <img src={recordIcon} alt="Oral Defense Icon" className="card-icon" />
           </div>
@@ -75,7 +81,7 @@ export default function TasksRecord() {
         </div>
 
         {/* Final Defense Card */}
-        <div className="task-card" onClick={() => window.location.href = '/final-defense'}>
+        <div className="task-card" onClick={() => handleCardClick('/final-tasks-record')}>
           <div className="task-card-icon">
             <img src={recordIcon} alt="Final Defense Icon" className="card-icon" />
           </div>
@@ -143,17 +149,17 @@ export default function TasksRecord() {
         }
 
         .task-card-icon {
-          margin-bottom: 10px;  /* Space between icon and title */
+          margin-bottom: 10px;
         }
 
         .card-icon {
-          width: 50px;  /* Set the icon size appropriately */
+          width: 50px; 
           height: 50px;
           object-fit: contain;
         }
 
         .task-card-header {
-          font-size: 14 px;  /* Adjusted font size for title */
+          font-size: 14px;
           font-weight: bold;
           color: #3B0304;
         }
@@ -188,35 +194,6 @@ export default function TasksRecord() {
 
         .task-title {
           margin: 0;
-        }
-
-        .status-badge {
-          display: inline-flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 6px 12px;
-          border-radius: 12px;
-          color: #fff;
-          cursor: pointer;
-          font-weight: bold;
-          width: 100%;
-        }
-
-        .status-text {
-          font-size: 14px;
-        }
-
-        .dropdown-menu {
-          position: absolute;
-          top: calc(100% + 12px);
-          left: 0;
-          background: #fff;
-          border: 1px solid #B2B2B2;
-          border-radius: 12px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-          z-index: 10;
-          width: 100%;
-          padding: 4px 0;
         }
       `}</style>
     </div>

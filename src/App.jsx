@@ -11,6 +11,14 @@ import TasksBoard from './components/tasks board/tasks-board';
 import ViewTasksBoard from './components/tasks board/view-tb';
 import TasksRecord from './components/tasks record/tasks-record'; // Updated import path
 
+// Corrected paths for the new tasks record components
+import TitleTasksRecord from './components/tasks record/title-tasks-record';  // Corrected path
+import OralTasksRecord from './components/tasks record/oral-tasks-record';    // Corrected path
+import FinalTasksRecord from './components/tasks record/final-tasks-record';  // Corrected path
+
+// Updated Events component path
+import Events from './components/events';  // Corrected path for events component
+
 import './App.css';
 
 function App() {
@@ -31,7 +39,8 @@ function App() {
         <Link to="/final-defense" style={{ color: '#fff', textDecoration: 'none' }}>Final Defense</Link>
         <Link to="/adviser-tasks" style={{ color: '#fff', textDecoration: 'none' }}>Adviser Tasks</Link>
         <Link to="/tasks-board" style={{ color: '#fff', textDecoration: 'none' }}>Tasks Board</Link>
-        <Link to="/tasks-record" style={{ color: '#fff', textDecoration: 'none' }}>Tasks Record</Link> {/* Link to TasksRecord */}
+        <Link to="/tasks-record" style={{ color: '#fff', textDecoration: 'none' }}>Tasks Record</Link>
+        <Link to="/events" style={{ color: '#fff', textDecoration: 'none' }}>Events</Link> {/* Link for Events */}
       </nav>
 
       {/* Routes */}
@@ -44,6 +53,14 @@ function App() {
         <Route path="/tasks-board" element={<TasksBoard />} />
         <Route path="/view-tasksboard" element={<ViewTasksBoard />} />
         <Route path="/tasks-record" element={<TasksRecord />} /> {/* Route for TasksRecord */}
+        
+        {/* Routes for new tasks record pages */}
+        <Route path="/title-tasks-record" element={<TitleTasksRecord />} /> {/* Route for Title Tasks Record */}
+        <Route path="/oral-tasks-record" element={<OralTasksRecord />} /> {/* Route for Oral Tasks Record */}
+        <Route path="/final-tasks-record" element={<FinalTasksRecord />} /> {/* Route for Final Tasks Record */}
+
+        {/* Route for Events */}
+        <Route path="/events" element={<Events />} /> {/* Route for Events */}
       </Routes>
     </div>
   );

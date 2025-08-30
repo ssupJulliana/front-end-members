@@ -1,23 +1,19 @@
-// src/components/tasks/tasks-final-defense.jsx
-import React, { useState, useEffect, useRef } from "react";
-import taskIcon from "../../assets/tasks-icon.png";
+// src/components/final-tasks-record.jsx
+import React, { useState, useEffect, useRef } from 'react';
+import taskIcon from "../../assets/tasks-record-icon.png"; // Assuming this is the correct icon for this component
 import searchIcon from "../../assets/search-icon.png";
 import filterIcon from "../../assets/filter-icon.png";
 import exitIcon from "../../assets/exit-icon.png";
 import dropdownIconWhite from "../../assets/dropdown-icon-white.png";
 
-const TasksFinalDefense = () => {
-  const [status, setStatus] = useState("To Review");
-  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+const FinalTasksRecord = () => {
   const [filterCategory, setFilterCategory] = useState("Filter");
   const [filterValue, setFilterValue] = useState("");
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [activeSubFilter, setActiveSubFilter] = useState(null);
 
-  const statusDropdownRef = useRef(null);
   const filterDropdownRef = useRef(null);
 
-  const STATUS_OPTIONS = ["To Do", "In Progress", "To Review", "Missed"];
   const PROJECT_PHASES = [
     "Planning",
     "Design",
@@ -27,29 +23,8 @@ const TasksFinalDefense = () => {
     "Review",
   ];
 
-  const getStatusColor = (value) => {
-    switch (value) {
-      case "To Do":
-        return "#FABC3F";
-      case "In Progress":
-        return "#809D3C";
-      case "To Review":
-        return "#578FCA";
-      case "Missed":
-        return "#D32F2F";
-      default:
-        return "#ccc";
-    }
-  };
-
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        statusDropdownRef.current &&
-        !statusDropdownRef.current.contains(event.target)
-      ) {
-        setShowStatusDropdown(false);
-      }
       if (
         filterDropdownRef.current &&
         !filterDropdownRef.current.contains(event.target)
@@ -76,7 +51,7 @@ const TasksFinalDefense = () => {
     <div className="page-wrapper">
       <h2 className="section-title">
         <img src={taskIcon} alt="Tasks Icon" className="icon-image" />
-        Tasks
+        Final Tasks Record
       </h2>
       <hr className="divider" />
 
@@ -107,40 +82,30 @@ const TasksFinalDefense = () => {
             {showFilterDropdown && (
               <div className="dropdown-menu filter-dropdown-menu">
                 {!activeSubFilter ? (
-                  <>
-                    <div
-                      className="dropdown-item"
-                      onClick={() => setActiveSubFilter("Status")}
-                    >
-                      Status
-                    </div>
-                    <div
-                      className="dropdown-item"
-                      onClick={() => setActiveSubFilter("Project Phase")}
-                    >
-                      Project Phase
-                    </div>
-                  </>
+                  <div
+                    className="dropdown-item"
+                    onClick={() => setActiveSubFilter("Project Phase")}
+                  >
+                    Project Phase
+                  </div>
                 ) : (
                   <>
                     <div className="dropdown-title">{activeSubFilter}</div>
                     <hr />
-                    {(activeSubFilter === "Status" ? STATUS_OPTIONS : PROJECT_PHASES).map(
-                      (opt) => (
-                        <div
-                          key={opt}
-                          className="dropdown-item"
-                          onClick={() => {
-                            setFilterValue(opt);
-                            setFilterCategory(activeSubFilter);
-                            setShowFilterDropdown(false);
-                            setActiveSubFilter(null);
-                          }}
-                        >
-                          {opt}
-                        </div>
-                      )
-                    )}
+                    {PROJECT_PHASES.map((opt) => (
+                      <div
+                        key={opt}
+                        className="dropdown-item"
+                        onClick={() => {
+                          setFilterValue(opt);
+                          setFilterCategory(activeSubFilter);
+                          setShowFilterDropdown(false);
+                          setActiveSubFilter(null);
+                        }}
+                      >
+                        {opt}
+                      </div>
+                    ))}
                   </>
                 )}
               </div>
@@ -159,6 +124,7 @@ const TasksFinalDefense = () => {
               <th className="center-text">Date Created</th>
               <th className="center-text">Due Date</th>
               <th className="center-text">Time</th>
+              <th className="center-text">Date Completed</th>
               <th className="center-text">Revision No.</th>
               <th className="center-text">Status</th>
               <th className="center-text">Methodology</th>
@@ -175,37 +141,11 @@ const TasksFinalDefense = () => {
               <td className="center-text">Jan 10, 2025</td>
               <td className="center-text">Jan 15, 2025</td>
               <td className="center-text">2:00 PM</td>
+              <td className="center-text">Jan 15, 2025</td>
               <td className="center-text revision">No Revision</td>
               <td className="center-text status-cell">
-                <div className="dropdown-wrapper" ref={statusDropdownRef}>
-                  <div
-                    className="status-badge"
-                    style={{ backgroundColor: getStatusColor(status) }}
-                    onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-                  >
-                    <span className="status-text">{status}</span>
-                    <img
-                      src={dropdownIconWhite}
-                      alt="Dropdown Icon"
-                      className="status-dropdown-icon"
-                    />
-                  </div>
-                  {showStatusDropdown && (
-                    <div className="dropdown-menu">
-                      {STATUS_OPTIONS.map((opt) => (
-                        <div
-                          key={opt}
-                          className="dropdown-item"
-                          onClick={() => {
-                            setStatus(opt);
-                            setShowStatusDropdown(false);
-                          }}
-                        >
-                          {opt}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                <div className="status-badge" style={{ backgroundColor: "#578FCA" }}>
+                  <span className="status-text">Completed</span>
                 </div>
               </td>
               <td className="center-text">Waterfall</td>
@@ -217,10 +157,12 @@ const TasksFinalDefense = () => {
 
       <style>{`
         * { box-sizing: border-box; }
+
         .page-wrapper {
           width: 100%;
           padding: 40px 20px;
         }
+
         .section-title {
           font-size: 20px;
           font-weight: bold;
@@ -230,16 +172,19 @@ const TasksFinalDefense = () => {
           align-items: center;
           gap: 8px;
         }
+
         .icon-image {
           width: 24px;
           height: 24px;
           object-fit: contain;
         }
+
         .divider {
           border: none;
           border-top: 2px solid #3B0304;
           margin-bottom: 20px;
         }
+
         .tasks-container {
           background: #fff;
           border-radius: 20px;
@@ -250,6 +195,7 @@ const TasksFinalDefense = () => {
           overflow: visible;
           border: 1px solid #B2B2B2;
         }
+
         .search-filter-wrapper {
           display: flex;
           justify-content: space-between;
@@ -257,6 +203,7 @@ const TasksFinalDefense = () => {
           margin-bottom: 12px;
           gap: 12px;
         }
+
         .search-bar, .filter-button {
           display: flex;
           align-items: center;
@@ -268,13 +215,16 @@ const TasksFinalDefense = () => {
           cursor: pointer;
           gap: 6px;
         }
+
         .search-bar {
           width: 200px;
         }
+
         .search-icon {
           width: 16px;
           height: 16px;
         }
+
         .search-input {
           border: none;
           outline: none;
@@ -282,75 +232,31 @@ const TasksFinalDefense = () => {
           color: #3B0304;
           width: 100%;
         }
+
         .filter-wrapper {
           position: relative;
           width: 160px;
           user-select: none;
         }
+
         .filter-button {
           font-size: 14px;
           justify-content: left;
           width: 100%;
           font-weight: normal;
         }
+
         .filter-icon {
           width: 18px;
           height: 18px;
         }
+
         .clear-icon {
           margin-left: auto;
           width: 16px;
           height: 16px;
         }
-        .tasks-table {
-          width: 100%;
-          border-collapse: collapse;
-          font-size: 14px;
-        }
-        .tasks-table th, .tasks-table td {
-          padding: 12px 10px;
-          white-space: nowrap;
-        }
-        .tasks-table th {
-          background-color: #fafafa;
-          font-weight: bold;
-          color: #000;
-          text-align: center;
-        }
-        .tasks-table tbody tr:nth-child(even) {
-          background-color: #fafafa;
-        }
-        .center-text {
-          text-align: center;
-        }
-        .revision {
-          color: #3B0304;
-          font-weight: bold;
-        }
-        .dropdown-wrapper {
-          position: relative;
-          display: inline-block;
-          width: 120px;
-        }
-        .status-badge {
-          display: inline-flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 6px 12px;
-          border-radius: 12px;
-          color: #fff;
-          cursor: pointer;
-          font-weight: bold;
-          width: 100%;
-        }
-        .status-text {
-          font-size: 14px;
-        }
-        .status-dropdown-icon {
-          width: 12px;
-          height: 12px;
-          margin-left: 6px;
-        }
+
         .dropdown-menu {
           position: absolute;
           top: calc(100% + 12px);
@@ -363,25 +269,73 @@ const TasksFinalDefense = () => {
           width: 100%;
           padding: 4px 0;
         }
+
         .filter-dropdown-menu {
-          width: 180px;
+          width: 160px;
         }
+
         .dropdown-title {
           font-weight: bold;
           padding: 8px 12px;
           font-size: 14px;
         }
+
         .dropdown-item {
           padding: 10px 12px;
           cursor: pointer;
           font-size: 14px;
         }
+
         .dropdown-item:hover {
           background-color: #f0f0f0;
+        }
+
+        .tasks-table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 14px;
+        }
+
+        .tasks-table th, .tasks-table td {
+          text-align: center;
+          padding: 10px;
+        }
+
+        .tasks-table th {
+          background-color: #F2F2F2;
+          font-weight: bold;
+        }
+
+        .tasks-table td {
+          background-color: #FFFFFF;
+        }
+
+        .status-cell {
+          text-align: center;
+        }
+
+        .status-badge {
+          padding: 5px 10px;
+          color: white;
+          border-radius: 12px;
+          font-size: 12px;
+        }
+
+        .status-text {
+          font-weight: bold;
+        }
+
+        .revision {
+          color: #3B0304;
+          font-weight: bold;
+        }
+
+        .center-text {
+          text-align: center;
         }
       `}</style>
     </div>
   );
 };
 
-export default TasksFinalDefense;
+export default FinalTasksRecord;

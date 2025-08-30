@@ -1,56 +1,36 @@
-// src/components/adviser-tasks.jsx
-import React, { useState, useEffect, useRef } from "react";
-import adviserTasksIcon from "../assets/adviser-tasks-icon.png"; // 🔁 updated icon
-import searchIcon from "../assets/search-icon.png";
-import filterIcon from "../assets/filter-icon.png";
-import exitIcon from "../assets/exit-icon.png";
-import dropdownIconWhite from "../assets/dropdown-icon-white.png";
+// src/components/oral-tasks-record.jsx
+import React, { useState, useEffect, useRef } from 'react';
+import taskIcon from "../../assets/tasks-record-icon.png"; // Assuming this is the correct icon for this component
+import searchIcon from "../../assets/search-icon.png";
+import filterIcon from "../../assets/filter-icon.png";
+import exitIcon from "../../assets/exit-icon.png";
+import dropdownIconWhite from "../../assets/dropdown-icon-white.png";
 
-const AdviserTasks = () => {
-  const [status, setStatus] = useState("To Review");
-  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
-  const [filterLabel, setFilterLabel] = useState("Filter");
-  const [selectedFilterValue, setSelectedFilterValue] = useState("");
+const OralTasksRecord = () => {
+  const [filterCategory, setFilterCategory] = useState("Filter");
+  const [filterValue, setFilterValue] = useState("");
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
-  const [activeFilterCategory, setActiveFilterCategory] = useState(null);
+  const [activeSubFilter, setActiveSubFilter] = useState(null);
 
-  const statusDropdownRef = useRef(null);
   const filterDropdownRef = useRef(null);
 
-  const STATUS_OPTIONS = ["To Do", "In Progress", "To Review", "Completed", "Missed"];
-  const PROJECT_PHASES = ["Planning", "Design", "Development", "Testing", "Deployment", "Review"];
-
-  const getStatusColor = (value) => {
-    switch (value) {
-      case "To Do":
-        return "#FABC3F";
-      case "In Progress":
-        return "#809D3C";
-      case "To Review":
-        return "#578FCA";
-      case "Completed":
-        return "#4CAF50";
-      case "Missed":
-        return "#D32F2F";
-      default:
-        return "#ccc";
-    }
-  };
+  const PROJECT_PHASES = [
+    "Planning",
+    "Design",
+    "Development",
+    "Testing",
+    "Deployment",
+    "Review",
+  ];
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        statusDropdownRef.current &&
-        !statusDropdownRef.current.contains(event.target)
-      ) {
-        setShowStatusDropdown(false);
-      }
       if (
         filterDropdownRef.current &&
         !filterDropdownRef.current.contains(event.target)
       ) {
         setShowFilterDropdown(false);
-        setActiveFilterCategory(null);
+        setActiveSubFilter(null);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -61,17 +41,17 @@ const AdviserTasks = () => {
 
   const handleClearFilter = (e) => {
     e.stopPropagation();
-    setSelectedFilterValue("");
-    setFilterLabel("Filter");
+    setFilterCategory("Filter");
+    setFilterValue("");
     setShowFilterDropdown(false);
-    setActiveFilterCategory(null);
+    setActiveSubFilter(null);
   };
 
   return (
     <div className="page-wrapper">
       <h2 className="section-title">
-        <img src={adviserTasksIcon} alt="Adviser Tasks Icon" className="icon-image" />
-        Adviser Tasks
+        <img src={taskIcon} alt="Tasks Icon" className="icon-image" />
+        Tasks Record
       </h2>
       <hr className="divider" />
 
@@ -89,8 +69,8 @@ const AdviserTasks = () => {
               onClick={() => setShowFilterDropdown(!showFilterDropdown)}
             >
               <img src={filterIcon} alt="Filter Icon" className="filter-icon" />
-              {selectedFilterValue || filterLabel}
-              {selectedFilterValue && (
+              {filterValue || filterCategory}
+              {filterValue && (
                 <img
                   src={exitIcon}
                   alt="Clear Filter"
@@ -101,41 +81,33 @@ const AdviserTasks = () => {
             </button>
             {showFilterDropdown && (
               <div className="dropdown-menu filter-dropdown-menu">
-                {!activeFilterCategory ? (
+                {!activeSubFilter ? (
                   <>
                     <div
                       className="dropdown-item"
-                      onClick={() => setActiveFilterCategory("Status")}
-                    >
-                      Status
-                    </div>
-                    <div
-                      className="dropdown-item"
-                      onClick={() => setActiveFilterCategory("Project Phase")}
+                      onClick={() => setActiveSubFilter("Project Phase")}
                     >
                       Project Phase
                     </div>
                   </>
                 ) : (
                   <>
-                    <div className="dropdown-title">{activeFilterCategory}</div>
+                    <div className="dropdown-title">{activeSubFilter}</div>
                     <hr />
-                    {(activeFilterCategory === "Status" ? STATUS_OPTIONS : PROJECT_PHASES).map(
-                      (opt) => (
-                        <div
-                          key={opt}
-                          className="dropdown-item"
-                          onClick={() => {
-                            setSelectedFilterValue(opt);
-                            setFilterLabel(activeFilterCategory);
-                            setShowFilterDropdown(false);
-                            setActiveFilterCategory(null);
-                          }}
-                        >
-                          {opt}
-                        </div>
-                      )
-                    )}
+                    {PROJECT_PHASES.map((opt) => (
+                      <div
+                        key={opt}
+                        className="dropdown-item"
+                        onClick={() => {
+                          setFilterValue(opt);
+                          setFilterCategory(activeSubFilter);
+                          setShowFilterDropdown(false);
+                          setActiveSubFilter(null);
+                        }}
+                      >
+                        {opt}
+                      </div>
+                    ))}
                   </>
                 )}
               </div>
@@ -147,13 +119,14 @@ const AdviserTasks = () => {
           <thead>
             <tr>
               <th className="center-text">NO</th>
-              <th className="center-text">Team</th>
+              <th className="center-text">Assigned</th>
               <th className="center-text">Tasks</th>
               <th className="center-text">Subtasks</th>
               <th className="center-text">Elements</th>
               <th className="center-text">Date Created</th>
               <th className="center-text">Due Date</th>
               <th className="center-text">Time</th>
+              <th className="center-text">Date Completed</th>
               <th className="center-text">Revision No.</th>
               <th className="center-text">Status</th>
               <th className="center-text">Methodology</th>
@@ -163,48 +136,22 @@ const AdviserTasks = () => {
           <tbody>
             <tr>
               <td className="center-text">1.</td>
-              <td className="center-text">Team Phoenix</td>
-              <td className="center-text">Prototype Implementation</td>
-              <td className="center-text">API Integration</td>
-              <td className="center-text">Backend Services</td>
-              <td className="center-text">Aug 1, 2025</td>
-              <td className="center-text">Aug 15, 2025</td>
-              <td className="center-text">10:00 AM</td>
-              <td className="center-text revision">1st Revision</td>
+              <td className="center-text">Harzwel Zhen B Lacson</td>
+              <td className="center-text">Document Review</td>
+              <td className="center-text">Initial Draft Review</td>
+              <td className="center-text">Text Elements</td>
+              <td className="center-text">Jan 5, 2025</td>
+              <td className="center-text">Jan 10, 2025</td>
+              <td className="center-text">8:00 AM</td>
+              <td className="center-text">Jan 10, 2025</td>
+              <td className="center-text revision">No Revision</td>
               <td className="center-text status-cell">
-                <div className="dropdown-wrapper" ref={statusDropdownRef}>
-                  <div
-                    className="status-badge"
-                    style={{ backgroundColor: getStatusColor(status) }}
-                    onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-                  >
-                    <span className="status-text">{status}</span>
-                    <img
-                      src={dropdownIconWhite}
-                      alt="Dropdown Icon"
-                      className="status-dropdown-icon"
-                    />
-                  </div>
-                  {showStatusDropdown && (
-                    <div className="dropdown-menu">
-                      {STATUS_OPTIONS.map((opt) => (
-                        <div
-                          key={opt}
-                          className="dropdown-item"
-                          onClick={() => {
-                            setStatus(opt);
-                            setShowStatusDropdown(false);
-                          }}
-                        >
-                          {opt}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                <div className="status-badge" style={{ backgroundColor: "#578FCA" }}>
+                  <span className="status-text">Completed</span>
                 </div>
               </td>
               <td className="center-text">Agile</td>
-              <td className="center-text">Development</td>
+              <td className="center-text">Design</td>
             </tr>
           </tbody>
         </table>
@@ -212,10 +159,12 @@ const AdviserTasks = () => {
 
       <style>{`
         * { box-sizing: border-box; }
+
         .page-wrapper {
           width: 100%;
           padding: 40px 20px;
         }
+
         .section-title {
           font-size: 20px;
           font-weight: bold;
@@ -225,152 +174,172 @@ const AdviserTasks = () => {
           align-items: center;
           gap: 8px;
         }
+
         .icon-image {
           width: 24px;
           height: 24px;
+          object-fit: contain;
         }
+
         .divider {
           border: none;
           border-top: 2px solid #3B0304;
           margin-bottom: 20px;
         }
+
         .tasks-container {
           background: #fff;
           border-radius: 20px;
+          width: 100%;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          min-height: 500px;
           padding: 20px;
+          overflow: visible;
           border: 1px solid #B2B2B2;
         }
+
         .search-filter-wrapper {
           display: flex;
           justify-content: space-between;
+          align-items: center;
           margin-bottom: 12px;
           gap: 12px;
         }
-        .search-bar {
+
+        .search-bar, .filter-button {
           display: flex;
           align-items: center;
           background: #fff;
           border: 1px solid #3B0304;
           border-radius: 12px;
           padding: 6px 12px;
+          color: #3B0304;
+          cursor: pointer;
+          gap: 6px;
+        }
+
+        .search-bar {
           width: 200px;
         }
+
         .search-icon {
           width: 16px;
           height: 16px;
         }
+
         .search-input {
           border: none;
           outline: none;
           font-size: 14px;
           color: #3B0304;
           width: 100%;
-          margin-left: 6px;
         }
+
         .filter-wrapper {
           position: relative;
           width: 160px;
           user-select: none;
         }
+
         .filter-button {
-          display: flex;
-          align-items: center;
-          background: #fff;
-          border: 1px solid #3B0304;
-          border-radius: 12px;
-          padding: 6px 12px;
           font-size: 14px;
-          color: #3B0304;
+          justify-content: left;
           width: 100%;
-          cursor: pointer;
-          gap: 6px;
+          font-weight: normal;
         }
+
         .filter-icon {
           width: 18px;
           height: 18px;
         }
+
         .clear-icon {
           margin-left: auto;
           width: 16px;
           height: 16px;
         }
+
         .dropdown-menu {
           position: absolute;
           top: calc(100% + 12px);
           left: 0;
           background: #fff;
+          border: 1px solid #B2B2B2;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0,0,0,0.15);
           z-index: 10;
           width: 100%;
           padding: 4px 0;
         }
+
         .filter-dropdown-menu {
-          padding: 8px;
+          width: 160px;
         }
+
+        .dropdown-title {
+          font-weight: bold;
+          padding: 8px 12px;
+          font-size: 14px;
+        }
+
         .dropdown-item {
           padding: 10px 12px;
           cursor: pointer;
           font-size: 14px;
         }
+
         .dropdown-item:hover {
           background-color: #f0f0f0;
         }
-        .dropdown-title {
-          font-weight: bold;
-          padding: 4px 12px;
-          font-size: 13px;
-          color: #3B0304;
-        }
+
         .tasks-table {
           width: 100%;
           border-collapse: collapse;
           font-size: 14px;
         }
-        .tasks-table th,
-        .tasks-table td {
+
+        .tasks-table th, .tasks-table td {
           padding: 12px 10px;
           white-space: nowrap;
-          text-align: center;
         }
+
         .tasks-table th {
           background-color: #fafafa;
           font-weight: bold;
+          color: #000;
+          text-align: center;
         }
+
         .tasks-table tbody tr:nth-child(even) {
           background-color: #fafafa;
         }
+
+        .center-text {
+          text-align: center;
+        }
+
         .revision {
           color: #3B0304;
           font-weight: bold;
         }
-        .dropdown-wrapper {
-          position: relative;
-          display: inline-block;
-          width: 120px;
-        }
+
         .status-badge {
           display: inline-flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: center;
           padding: 6px 12px;
           border-radius: 12px;
           color: #fff;
-          cursor: pointer;
           font-weight: bold;
           width: 100%;
         }
+
         .status-text {
           font-size: 14px;
-        }
-        .status-dropdown-icon {
-          width: 12px;
-          height: 12px;
-          margin-left: 6px;
         }
       `}</style>
     </div>
   );
 };
 
-export default AdviserTasks;
+export default OralTasksRecord;
