@@ -17,7 +17,7 @@ const TasksFinalDefense = () => {
   const statusDropdownRef = useRef(null);
   const filterDropdownRef = useRef(null);
 
-  const STATUS_OPTIONS = ["To Do", "In Progress", "To Review", "Missed"];
+  const STATUS_OPTIONS = ["To Do", "In Progress", "To Review"]; // Removed "Missed"
   const PROJECT_PHASES = [
     "Planning",
     "Design",
@@ -125,7 +125,7 @@ const TasksFinalDefense = () => {
                   <>
                     <div className="dropdown-title">{activeSubFilter}</div>
                     <hr />
-                    {(activeSubFilter === "Status" ? STATUS_OPTIONS : PROJECT_PHASES).map(
+                    {(activeSubFilter === "Status" ? [...STATUS_OPTIONS, "Missed"] : PROJECT_PHASES).map(
                       (opt) => (
                         <div
                           key={opt}

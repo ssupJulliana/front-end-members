@@ -17,36 +17,28 @@ const TasksTitleDefense = () => {
   const statusDropdownRef = useRef(null);
   const filterDropdownRef = useRef(null);
 
-  const STATUS_OPTIONS = ["To Do", "In Progress", "To Review", "Missed"];
+  // Status options for dropdown inside the row (without "Missed")
+  const STATUS_OPTIONS_ROW = ["To Do", "In Progress", "To Review"];
+  // Full status list for filter options
+  const STATUS_OPTIONS_FILTER = ["To Do", "In Progress", "To Review", "Missed"];
   const PROJECT_PHASES = ["Planning", "Design", "Development", "Testing", "Deployment", "Review"];
 
   const getStatusColor = (value) => {
     switch (value) {
-      case "To Do":
-        return "#FABC3F";
-      case "In Progress":
-        return "#809D3C";
-      case "To Review":
-        return "#578FCA";
-      case "Missed":
-        return "#D32F2F";
-      default:
-        return "#ccc";
+      case "To Do": return "#FABC3F";
+      case "In Progress": return "#809D3C";
+      case "To Review": return "#578FCA";
+      case "Missed": return "#D32F2F";
+      default: return "#ccc";
     }
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        statusDropdownRef.current &&
-        !statusDropdownRef.current.contains(event.target)
-      ) {
+      if (statusDropdownRef.current && !statusDropdownRef.current.contains(event.target)) {
         setShowStatusDropdown(false);
       }
-      if (
-        filterDropdownRef.current &&
-        !filterDropdownRef.current.contains(event.target)
-      ) {
+      if (filterDropdownRef.current && !filterDropdownRef.current.contains(event.target)) {
         setShowFilterDropdown(false);
         setActiveSubFilter(null);
       }
@@ -101,16 +93,10 @@ const TasksTitleDefense = () => {
               <div className="dropdown-menu filter-dropdown-menu">
                 {!activeSubFilter ? (
                   <>
-                    <div
-                      className="dropdown-item"
-                      onClick={() => setActiveSubFilter("Status")}
-                    >
+                    <div className="dropdown-item" onClick={() => setActiveSubFilter("Status")}>
                       Status
                     </div>
-                    <div
-                      className="dropdown-item"
-                      onClick={() => setActiveSubFilter("Project Phase")}
-                    >
+                    <div className="dropdown-item" onClick={() => setActiveSubFilter("Project Phase")}>
                       Project Phase
                     </div>
                   </>
@@ -118,22 +104,20 @@ const TasksTitleDefense = () => {
                   <>
                     <div className="dropdown-title">{activeSubFilter}</div>
                     <hr />
-                    {(activeSubFilter === "Status" ? STATUS_OPTIONS : PROJECT_PHASES).map(
-                      (opt) => (
-                        <div
-                          key={opt}
-                          className="dropdown-item"
-                          onClick={() => {
-                            setFilterValue(opt);
-                            setFilterCategory(activeSubFilter);
-                            setShowFilterDropdown(false);
-                            setActiveSubFilter(null);
-                          }}
-                        >
-                          {opt}
-                        </div>
-                      )
-                    )}
+                    {(activeSubFilter === "Status" ? STATUS_OPTIONS_FILTER : PROJECT_PHASES).map((opt) => (
+                      <div
+                        key={opt}
+                        className="dropdown-item"
+                        onClick={() => {
+                          setFilterValue(opt);
+                          setFilterCategory(activeSubFilter);
+                          setShowFilterDropdown(false);
+                          setActiveSubFilter(null);
+                        }}
+                      >
+                        {opt}
+                      </div>
+                    ))}
                   </>
                 )}
               </div>
@@ -181,7 +165,7 @@ const TasksTitleDefense = () => {
                   </div>
                   {showStatusDropdown && (
                     <div className="dropdown-menu">
-                      {STATUS_OPTIONS.map((opt) => (
+                      {STATUS_OPTIONS_ROW.map((opt) => (
                         <div
                           key={opt}
                           className="dropdown-item"
@@ -203,7 +187,7 @@ const TasksTitleDefense = () => {
           </tbody>
         </table>
       </div>
-
+      
       <style>{`
         * { box-sizing: border-box; }
 

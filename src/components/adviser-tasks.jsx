@@ -1,20 +1,16 @@
 // src/components/adviser-tasks.jsx
 import React, { useState, useEffect, useRef } from "react";
-import adviserTasksIcon from "../assets/adviser-tasks-icon.png"; // 🔁 updated icon
+import adviserTasksIcon from "../assets/adviser-tasks-icon.png";
 import searchIcon from "../assets/search-icon.png";
 import filterIcon from "../assets/filter-icon.png";
 import exitIcon from "../assets/exit-icon.png";
-import dropdownIconWhite from "../assets/dropdown-icon-white.png";
 
 const AdviserTasks = () => {
-  const [status, setStatus] = useState("To Review");
-  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [filterLabel, setFilterLabel] = useState("Filter");
   const [selectedFilterValue, setSelectedFilterValue] = useState("");
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [activeFilterCategory, setActiveFilterCategory] = useState(null);
 
-  const statusDropdownRef = useRef(null);
   const filterDropdownRef = useRef(null);
 
   const STATUS_OPTIONS = ["To Do", "In Progress", "To Review", "Completed", "Missed"];
@@ -22,33 +18,18 @@ const AdviserTasks = () => {
 
   const getStatusColor = (value) => {
     switch (value) {
-      case "To Do":
-        return "#FABC3F";
-      case "In Progress":
-        return "#809D3C";
-      case "To Review":
-        return "#578FCA";
-      case "Completed":
-        return "#4CAF50";
-      case "Missed":
-        return "#D32F2F";
-      default:
-        return "#ccc";
+      case "To Do": return "#FABC3F";
+      case "In Progress": return "#809D3C";
+      case "To Review": return "#578FCA";
+      case "Completed": return "#4CAF50";
+      case "Missed": return "#D32F2F";
+      default: return "#ccc";
     }
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        statusDropdownRef.current &&
-        !statusDropdownRef.current.contains(event.target)
-      ) {
-        setShowStatusDropdown(false);
-      }
-      if (
-        filterDropdownRef.current &&
-        !filterDropdownRef.current.contains(event.target)
-      ) {
+      if (filterDropdownRef.current && !filterDropdownRef.current.contains(event.target)) {
         setShowFilterDropdown(false);
         setActiveFilterCategory(null);
       }
@@ -171,37 +152,13 @@ const AdviserTasks = () => {
               <td className="center-text">Aug 15, 2025</td>
               <td className="center-text">10:00 AM</td>
               <td className="center-text revision">1st Revision</td>
-              <td className="center-text status-cell">
-                <div className="dropdown-wrapper" ref={statusDropdownRef}>
-                  <div
-                    className="status-badge"
-                    style={{ backgroundColor: getStatusColor(status) }}
-                    onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-                  >
-                    <span className="status-text">{status}</span>
-                    <img
-                      src={dropdownIconWhite}
-                      alt="Dropdown Icon"
-                      className="status-dropdown-icon"
-                    />
-                  </div>
-                  {showStatusDropdown && (
-                    <div className="dropdown-menu">
-                      {STATUS_OPTIONS.map((opt) => (
-                        <div
-                          key={opt}
-                          className="dropdown-item"
-                          onClick={() => {
-                            setStatus(opt);
-                            setShowStatusDropdown(false);
-                          }}
-                        >
-                          {opt}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              <td className="center-text">
+                <span
+                  className="status-badge"
+                  style={{ backgroundColor: getStatusColor("In Progress") }}
+                >
+                  In Progress
+                </span>
               </td>
               <td className="center-text">Agile</td>
               <td className="center-text">Development</td>
@@ -344,29 +301,13 @@ const AdviserTasks = () => {
           color: #3B0304;
           font-weight: bold;
         }
-        .dropdown-wrapper {
-          position: relative;
-          display: inline-block;
-          width: 120px;
-        }
         .status-badge {
-          display: inline-flex;
-          align-items: center;
-          justify-content: space-between;
+          display: inline-block;
           padding: 6px 12px;
           border-radius: 12px;
           color: #fff;
-          cursor: pointer;
           font-weight: bold;
-          width: 100%;
-        }
-        .status-text {
           font-size: 14px;
-        }
-        .status-dropdown-icon {
-          width: 12px;
-          height: 12px;
-          margin-left: 6px;
         }
       `}</style>
     </div>

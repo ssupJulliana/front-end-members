@@ -18,6 +18,7 @@ const TasksOralDefense = () => {
   const filterDropdownRef = useRef(null);
 
   const STATUS_OPTIONS = ["To Do", "In Progress", "To Review", "Missed"];
+  const STATUS_OPTIONS_ROW = ["To Do", "In Progress", "To Review"]; // Exclude "Missed"
   const PROJECT_PHASES = [
     "Planning",
     "Design",
@@ -192,7 +193,7 @@ const TasksOralDefense = () => {
                   </div>
                   {showStatusDropdown && (
                     <div className="dropdown-menu">
-                      {STATUS_OPTIONS.map((opt) => (
+                      {STATUS_OPTIONS_ROW.map((opt) => (
                         <div
                           key={opt}
                           className="dropdown-item"
@@ -214,7 +215,6 @@ const TasksOralDefense = () => {
           </tbody>
         </table>
       </div>
-
       <style>{`
         * { box-sizing: border-box; }
 
